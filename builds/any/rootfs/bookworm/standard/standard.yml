@@ -1,6 +1,6 @@
 ############################################################
 #
-# Standard ONL Debian 10 Root Filesystem Configuration.
+# Standard ONL Debian 12 Root Filesystem Configuration.
 #
 # Requires:
 #     ARCH, PLATFORM_LIST
@@ -58,14 +58,14 @@ Multistrap:
   Security:
     packages: *Packages
     source: http://security.debian.org/debian-security
-    suite: buster/updates
+    suite: bookworm-security/updates
     omitdebsrc: true
     arches: amd64, arm64, armel
 
   Security-Local:
     packages: *Packages
     source: http://${APT_CACHE}security.debian.org/debian-security
-    suite: buster/updates
+    suite: bookworm-security/updates
     omitdebsrc: true
     arches: amd64, arm64, armel
 
@@ -80,14 +80,14 @@ Multistrap:
   FRR:
     packages: *Packages
     source: http://deb.frrouting.org/frr
-    suite: buster frr-stable
+    suite: bookworm frr-stable
     omitdebsrc: true
     arches: amd64, arm64
 
   FRR-Local:
     packages: *Packages
     source: http://${APT_CACHE}deb.frrouting.org/frr
-    suite: buster frr-stable
+    suite: bookworm frr-stable
     omitdebsrc: true
     arches: amd64, arm64
 
