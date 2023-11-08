@@ -9,10 +9,10 @@
 	url = http://github.com/floodlight/bigcode
 [submodule "sm/build-artifacts"]
 	path = sm/build-artifacts
-        url = http://github.com/opennetworklinux/build-artifacts
+	url = https://github.com/ganesasp/build-artifacts.git
 [submodule "sm/dent-artifacts"]
 	path = sm/dent-artifacts
-	url = https://github.com/dentproject/dent-artifacts.git
+	url = https://github.com/ganesasp/dent-artifacts.git
 [submodule "sm/iproute2"]
 	path = sm/iproute2
 	url = git://git.kernel.org/pub/scm/network/iproute2/iproute2.git
