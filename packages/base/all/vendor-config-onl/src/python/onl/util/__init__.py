@@ -9,13 +9,13 @@ class OnlServiceMixin(object):
                  logLevel=logging.DEBUG):
         self.logger.log(logLevel, "Executing: %s", cmd)
 
-        if isinstance(cmd, basestring):
+        if isinstance(cmd, str):
             shell = True
         else:
             shell = False
 
         if root is True and os.getuid() != 0:
-            if isinstance(cmd, basestring):
+            if isinstance(cmd, str):
                 cmd = "sudo " + cmd
             else:
                 cmd = ['sudo',] + list(cmd)
@@ -125,13 +125,13 @@ def dmerge(d1, d2):
 
 def wget(url, directory=None, temp_directory=None, extension=None):
 
-    import urllib2
+    import urllib.request, urllib.error, urllib.parse
     import tempfile
 
     try:
-        response = urllib2.urlopen(url)
+        response = urllib.request.urlopen(url)
         filename = os.path.basename(urllib2.urlparse.urlparse(response.url).path)
-    except Exception, e:
+    except Exception as e:
         return (e, None, None)
 
     if extension and not filename.endswith("%s" % extension):
@@ -146,7 +146,7 @@ def wget(url, directory=None, temp_directory=None, extension=None):
     try:
         subprocess.check_call("wget -P %s %s" % (directory, url), shell=True)
         return (None, filename, directory)
-    except subprocess.CalledProcessError, e:
+    except subprocess.CalledProcessError as e:
         return (e, None, None)
 
 def dpkg_architecture():

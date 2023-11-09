@@ -1,29 +1,29 @@
 from onl.platform.base import *
 from onl.platform.accton import *
 
-import commands
+import subprocess
 
 #IR3570A chip casue problem when read eeprom by i2c-block mode.
 #It happen when read 16th-byte offset that value is 0x8. So disable chip
 def disable_i2c_ir3570a(addr):
     check_i2c="i2cget -y 0 0x4 0x1"
-    status, output = commands.getstatusoutput(check_i2c)
+    status, output = subprocess.getstatusoutput(check_i2c)
     if status!=0:
         return -1
     cmd = "i2cset -y 0 0x%x 0xE5 0x01" % addr
-    status, output = commands.getstatusoutput(cmd)
+    status, output = subprocess.getstatusoutput(cmd)
     cmd = "i2cset -y 0 0x%x 0x12 0x02" % addr
-    status, output = commands.getstatusoutput(cmd)
+    status, output = subprocess.getstatusoutput(cmd)
     return status
 
 def ir3570_check():
     check_i2c="i2cget -y 0 0x42 0x1"
-    status, output = commands.getstatusoutput(check_i2c)
+    status, output = subprocess.getstatusoutput(check_i2c)
     if status!=0:
         return -1
     cmd = "i2cdump -y 0 0x42 s 0x9a"
     try:
-        status, output = commands.getstatusoutput(cmd)
+        status, output = subprocess.getstatusoutput(cmd)
         lines = output.split('\n')
         hn = re.findall(r'\w+', lines[-1])
         version = int(hn[1], 16)
@@ -32,17 +32,17 @@ def ir3570_check():
         else:
             ret = 0
     except Exception as e:
-        print "Error on ir3570_check() e:" + str(e)
+        print("Error on ir3570_check() e:" + str(e))
         return -1
     return ret
 
 def _8v89307_init():
     script = os.path.join(os.path.dirname(os.path.realpath(__file__)), "8v89307_init.sh")
     if os.path.exists(script):
-        status, output = commands.getstatusoutput(script)
-        print output
+        status, output = subprocess.getstatusoutput(script)
+        print(output)
         if status != 0:
-            print "Error in 8v89307_init: " + str(e)
+            print("Error in 8v89307_init: " + str(e))
             return False
     return True
 

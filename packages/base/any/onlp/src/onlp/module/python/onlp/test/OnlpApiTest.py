@@ -175,7 +175,7 @@ class SysHdrMixin(object):
         # root OID
 
         coids = [x for x in hdr.children()]
-        self.assert_(coids)
+        self.assertTrue(coids)
         self.assertLess(len(coids), onlp.onlp.ONLP_OID_TABLE_SIZE)
 
         def _oidType(oid):
@@ -400,7 +400,7 @@ class OidTest(OnlpTestMixin,
 
         v1 = V1(cookie, log=self.log.getChild("v1"))
         libonlp.onlp_oid_iterate(onlp.onlp.ONLP_OID_SYS, oidType, v1.cvisit(), cookie)
-        self.assert_(v1.oids)
+        self.assertTrue(v1.oids)
         oids = list(v1.oids)
 
         # filter based on OID type
@@ -408,7 +408,7 @@ class OidTest(OnlpTestMixin,
         oidType = onlp.onlp.ONLP_OID_TYPE.PSU
         v1b = V1(cookie, log=self.log.getChild("v1b"))
         libonlp.onlp_oid_iterate(onlp.onlp.ONLP_OID_SYS, oidType, v1b.cvisit(), cookie)
-        self.assert_(v1b.oids)
+        self.assertTrue(v1b.oids)
         self.assertLess(len(v1b.oids), len(oids))
 
         # validate error recovery
@@ -497,8 +497,8 @@ class FanTest(OnlpTestMixin,
         libonlp.onlp_fan_info_get(oid, ctypes.byref(fan))
 
         self.assertEqual(oid, fan.hdr._id)
-        self.assert_(fan.model)
-        self.assert_(fan.serial)
+        self.assertTrue(fan.model)
+        self.assertTrue(fan.serial)
         self.log.info("auditing fan %d: %s (S/N %s)",
                       oid & 0xFFFFFF,
                       fan.model, fan.serial)
@@ -525,20 +525,20 @@ class FanTest(OnlpTestMixin,
             self.assertNotEqual(onlp.onlp.ONLP_FAN_MODE.OFF, fan.mode)
             # default, fan should be running
 
-        self.assert_(onlp.onlp.ONLP_FAN_STATUS.PRESENT & fan.status)
+        self.assertTrue(onlp.onlp.ONLP_FAN_STATUS.PRESENT & fan.status)
         # default, fan should be present
 
         if fan.status & onlp.onlp.ONLP_FAN_STATUS.B2F:
-            self.assert_(onlp.onlp.ONLP_ONLP_FAN_CAPS.B2F)
+            self.assertTrue(onlp.onlp.ONLP_ONLP_FAN_CAPS.B2F)
         elif fan.status & onlp.onlp.ONLP_FAN_STATUS.F2B:
-            self.assert_(onlp.onlp.ONLP_FAN_CAPS.F2B)
+            self.assertTrue(onlp.onlp.ONLP_FAN_CAPS.F2B)
         else:
             self.log.warn("fan direction not supported")
 
         # retrieve fan status separately
         sts = ctypes.c_uint()
         libonlp.onlp_fan_status_get(oid, ctypes.byref(sts))
-        self.assert_(onlp.onlp.ONLP_FAN_STATUS.PRESENT & sts.value)
+        self.assertTrue(onlp.onlp.ONLP_FAN_STATUS.PRESENT & sts.value)
 
         # try to manipulate the fan speed
         if fan.caps & onlp.onlp.ONLP_FAN_CAPS.SET_RPM:
@@ -742,7 +742,7 @@ class FanTest(OnlpTestMixin,
         libonlp.onlp_oid_iterate(onlp.onlp.ONLP_OID_SYS,
                                  onlp.onlp.ONLP_OID_TYPE.FAN,
                                  v.cvisit(), 0)
-        self.assert_(v.oids)
+        self.assertTrue(v.oids)
 
         self.auditFanOid(v.oids[0])
 
@@ -780,7 +780,7 @@ class LedTest(OnlpTestMixin,
         libonlp.onlp_oid_iterate(onlp.onlp.ONLP_OID_SYS,
                                  onlp.onlp.ONLP_OID_TYPE.LED,
                                  v.cvisit(), 0)
-        self.assert_(v.oids)
+        self.assertTrue(v.oids)
 
         self.auditLedOid(v.oids[0])
 
@@ -795,18 +795,18 @@ class LedTest(OnlpTestMixin,
 
         self.assertEqual(oid, led.hdr._id)
 
-        self.assert_(led.caps)
+        self.assertTrue(led.caps)
         # should support some non-empty set of capabilities
 
         self.log.info("auditing led %d",
                       oid & 0xFFFFFF)
 
-        self.assert_(led.status & onlp.onlp.ONLP_LED_STATUS.PRESENT)
+        self.assertTrue(led.status & onlp.onlp.ONLP_LED_STATUS.PRESENT)
 
         # retrieve led status separately
         sts = ctypes.c_uint()
         libonlp.onlp_led_status_get(oid, ctypes.byref(sts))
-        self.assert_(onlp.onlp.ONLP_LED_STATUS.PRESENT & sts.value)
+        self.assertTrue(onlp.onlp.ONLP_LED_STATUS.PRESENT & sts.value)
 
         try:
             subprocess.check_call(('service', 'onlpd', 'stop',))
@@ -1081,7 +1081,7 @@ class ThermalTest(OnlpTestMixin,
         libonlp.onlp_oid_iterate(onlp.onlp.ONLP_OID_SYS,
                                  onlp.onlp.ONLP_OID_TYPE.THERMAL,
                                  v.cvisit(), 0)
-        self.assert_(v.oids)
+        self.assertTrue(v.oids)
 
         self.auditThermalOid(v.oids[0])
 
@@ -1096,16 +1096,16 @@ class ThermalTest(OnlpTestMixin,
 
         self.assertEqual(oid, thm.hdr._id)
 
-        self.assert_(thm.caps)
+        self.assertTrue(thm.caps)
         # should support some non-empty set of capabilities
 
-        self.assert_(thm.caps & onlp.onlp.ONLP_THERMAL_CAPS.GET_TEMPERATURE)
+        self.assertTrue(thm.caps & onlp.onlp.ONLP_THERMAL_CAPS.GET_TEMPERATURE)
         # sensor should at least report temperature
 
         self.log.info("auditing thermal %d",
                       oid & 0xFFFFFF)
 
-        self.assert_(thm.status & onlp.onlp.ONLP_THERMAL_STATUS.PRESENT)
+        self.assertTrue(thm.status & onlp.onlp.ONLP_THERMAL_STATUS.PRESENT)
         # sensor should be present
 
         self.assertGreater(thm.mcelcius, 20000)
@@ -1115,7 +1115,7 @@ class ThermalTest(OnlpTestMixin,
         # retrieve thermal status separately
         sts = ctypes.c_uint()
         libonlp.onlp_thermal_status_get(oid, ctypes.byref(sts))
-        self.assert_(onlp.onlp.ONLP_THERMAL_STATUS.PRESENT & sts.value)
+        self.assertTrue(onlp.onlp.ONLP_THERMAL_STATUS.PRESENT & sts.value)
 
         # test ioctl
         code = libonlp.onlp_thermal_ioctl(9999)
@@ -1161,7 +1161,7 @@ class PsuTest(OnlpTestMixin,
         libonlp.onlp_oid_iterate(onlp.onlp.ONLP_OID_SYS,
                                  onlp.onlp.ONLP_OID_TYPE.PSU,
                                  v.cvisit(), 0)
-        self.assert_(v.oids)
+        self.assertTrue(v.oids)
 
         self.auditPsuOid(v.oids[0])
 
@@ -1176,7 +1176,7 @@ class PsuTest(OnlpTestMixin,
 
         self.assertEqual(oid, psu.hdr._id)
 
-        self.assert_(psu.caps
+        self.assertTrue(psu.caps
                      & (onlp.onlp.ONLP_PSU_CAPS.AC
                         | onlp.onlp.ONLP_PSU_CAPS.DC12
                         | onlp.onlp.ONLP_PSU_CAPS.DC48))
@@ -1185,7 +1185,7 @@ class PsuTest(OnlpTestMixin,
         self.log.info("auditing psu %d",
                       oid & 0xFFFFFF)
 
-        self.assert_(psu.status & onlp.onlp.ONLP_PSU_STATUS.PRESENT)
+        self.assertTrue(psu.status & onlp.onlp.ONLP_PSU_STATUS.PRESENT)
         # sensor should be present
 
         if (psu.caps
@@ -1208,7 +1208,7 @@ class PsuTest(OnlpTestMixin,
         # retrieve psu status separately
         sts = ctypes.c_uint()
         libonlp.onlp_psu_status_get(oid, ctypes.byref(sts))
-        self.assert_(onlp.onlp.ONLP_PSU_STATUS.PRESENT & sts.value)
+        self.assertTrue(onlp.onlp.ONLP_PSU_STATUS.PRESENT & sts.value)
 
         # test ioctl
         code = libonlp.onlp_psu_ioctl(9999)
@@ -1282,7 +1282,7 @@ class SfpTest(OnlpTestMixin,
 
         ports = [x[0] for x in enumerate(self.bitmap2list()) if x[1]]
         self.log.info("found %d SFP ports", len(ports))
-        self.assert_(ports)
+        self.assertTrue(ports)
 
         self.assertEqual(0, ports[0])
         self.assertEqual(len(ports)-1, ports[-1])
@@ -1303,7 +1303,7 @@ class SfpTest(OnlpTestMixin,
         self.assertStatusOK(sts)
         present = [x[0] for x in enumerate(self.bitmap2list(bm)) if x[1]]
         self.log.info("found %d SFPs", len(present))
-        self.assert_(present)
+        self.assertTrue(present)
 
         presentSet = set(present)
         portSet = set(ports)
@@ -1388,11 +1388,11 @@ class SfpTest(OnlpTestMixin,
 
         # XXX info strings include space padding
         vendor = sffEeprom.info.vendor.strip()
-        self.assert_(vendor)
+        self.assertTrue(vendor)
         model = sffEeprom.info.model.strip()
-        self.assert_(model)
+        self.assertTrue(model)
         serial = sffEeprom.info.serial.strip()
-        self.assert_(serial)
+        self.assertTrue(serial)
 
         self.log.info("found SFP: %s %s (S/N %s)",
                       vendor, model, serial)
@@ -1414,7 +1414,7 @@ class SfpTest(OnlpTestMixin,
         caps = ctypes.c_uint32()
         sts = libonlp.sff_module_caps_get(sffEeprom.info.module_type, ctypes.byref(caps))
         self.assertStatusOK(sts)
-        self.assert_(caps)
+        self.assertTrue(caps)
         cl = []
         for i in range(32):
             fl = 1<<i

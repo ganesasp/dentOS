@@ -17,8 +17,8 @@ def main(platform):
     ops = ap.parse_args()
 
     if ops.info:
-        print platform
+        print(platform)
 
     if ops.env:
-        print platform.get_environment()
+        print(platform.get_environment())
 

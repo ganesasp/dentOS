@@ -8,7 +8,7 @@ import subprocess
 import re
 import tempfile
 import logging
-import StringIO
+import io
 import parted
 import yaml
 import zipfile
@@ -16,12 +16,12 @@ import shutil
 import imp
 import fnmatch, glob
 
-from InstallUtils import SubprocessMixin
-from InstallUtils import MountContext, BlkidParser, PartedParser, UbinfoParser
-from InstallUtils import ProcMountsParser
-from InstallUtils import GdiskParser
-from InstallUtils import OnieSubprocess
-from Plugin import Plugin
+from .InstallUtils import SubprocessMixin
+from .InstallUtils import MountContext, BlkidParser, PartedParser, UbinfoParser
+from .InstallUtils import ProcMountsParser
+from .InstallUtils import GdiskParser
+from .InstallUtils import OnieSubprocess
+from .Plugin import Plugin
 
 import onl.install.ConfUtils
 
@@ -299,7 +299,7 @@ class Base:
             cnt = None
             nextBlock = self.nextBlock or 1
             minpart = self.minpart or 1
-            for ul, ub in UNITS.items():
+            for ul, ub in list(UNITS.items()):
                 if sz.endswith(ul):
                     cnt = _u2s(int(sz[:-len(ul)], 10), ub)
                     break
@@ -900,7 +900,7 @@ class UBIfsCreater(SubprocessMixin, Base):
                     else:
                         sz, fmt = partData, 'ubifs'
                     cnt = None
-                    for ul, ub in UNITS.items():
+                    for ul, ub in list(UNITS.items()):
                         if sz.endswith(ul):
                             cnt = int(sz[:-len(ul)], 10) * ub
                             break

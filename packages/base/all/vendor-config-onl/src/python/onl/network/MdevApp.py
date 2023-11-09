@@ -25,7 +25,7 @@ def do_add(device):
         syspath = dst[13:]
 
     tgtname = None
-    for intf, idata in d.items():
+    for intf, idata in list(d.items()):
 
         n = idata.get('name', None)
         if n is not None and n == device:

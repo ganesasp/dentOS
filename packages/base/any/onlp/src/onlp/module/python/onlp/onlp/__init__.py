@@ -38,7 +38,7 @@ class aim_char_p(aim_void_p):
             aim_void_p.__init__(self, stringOrAddress)
             return
 
-        if isinstance(stringOrAddress, basestring):
+        if isinstance(stringOrAddress, str):
             cs = ctypes.c_char_p(stringOrAddress)
             ptr = libonlp.aim_malloc(len(stringOrAddress)+1)
             libc.strcpy(ptr, ctypes.addressof(cs))
@@ -242,7 +242,7 @@ class OidTableIterator(object):
     def __iter__(self):
         return self
 
-    def next(self):
+    def __next__(self):
         if self.idx >= ONLP_OID_TABLE_SIZE:
             raise StopIteration
         oid = self.hdr.coids[self.idx]

@@ -16,7 +16,7 @@ import fcntl
 import subprocess
 import glob
 import submodules
-import StringIO
+import io
 from collections import Iterable
 import onlyaml
 import onlu
@@ -77,10 +77,10 @@ class OnlRfsSystemAdmin(object):
         # Can't use the userdel command because of potential uid 0 in-user problems while running ourselves
         for line in fileinput.input(pf, inplace=True):
             if not line.startswith('%s:' % username):
-                print line,
+                print(line, end=' ')
         for line in fileinput.input(sf, inplace=True):
             if not line.startswith('%s:' % username):
-                print line,
+                print(line, end=' ')
 
         self.chmod("go-wx", pf);
         self.chmod("go-wx", sf);
@@ -205,9 +205,9 @@ class OnlMultistrapConfig(object):
         self.localrepos = []
 
     def generate_handle(self, handle):
-        for (name, fields) in self.config.iteritems():
+        for (name, fields) in self.config.items():
             handle.write("[%s]\n" % name)
-            for (k,v) in fields.iteritems():
+            for (k,v) in fields.items():
 
                 if type(v) is bool:
                     v = 'true' if v == True else 'false'
@@ -237,8 +237,8 @@ class OnlMultistrapConfig(object):
 
     def get_packages(self):
         pkgs = []
-        for (name, fields) in self.config.iteritems():
-            for (k,v) in fields.iteritems():
+        for (name, fields) in self.config.items():
+            for (k,v) in fields.items():
                 if k == 'packages':
                     if type(v) is list:
                         pkgs = pkgs + list(onlu.sflatten(v))
@@ -247,7 +247,7 @@ class OnlMultistrapConfig(object):
         return pkgs
 
     def __str__(self):
-        handle = StringIO.StringIO()
+        handle = io.StringIO()
         self.generate_handle(handle)
         return handle.getvalue()
 
@@ -282,7 +282,7 @@ class OnlRfsContext(object):
                              ex=OnlRfsError("Could install new resolv.conf"))
             return self
 
-        except Exception, e:
+        except Exception as e:
             logger.error("Exception %s in OnlRfsContext::__enter__" % e)
             self.__exit__(None, None, None)
             raise e
@@ -400,7 +400,7 @@ class OnlRfsBuilder(object):
 
         script = os.path.join(dir_, "tmp/configure.sh")
         with open(script, "w") as f:
-            os.chmod(script, 0700)
+            os.chmod(script, 0o700)
             f.write("""#!/bin/bash -ex
 /bin/echo -e "#!/bin/sh\\nexit 101" >/usr/sbin/policy-rc.d
 chmod +x /usr/sbin/policy-rc.d
@@ -493,10 +493,10 @@ rm -f /usr/sbin/policy-rc.d
 
 
                 ua = OnlRfsSystemAdmin(dir_)
-                for (group, values) in Configure.get('groups', {}).iteritems():
+                for (group, values) in Configure.get('groups', {}).items():
                     ua.groupadd(group=group, **values if values else {})
 
-                for (user, values) in Configure.get('users', {}).iteritems():
+                for (user, values) in Configure.get('users', {}).items():
                     if user == 'root':
                         if 'password' in values:
                             ua.user_password_set(user, values['password'])
@@ -544,7 +544,7 @@ rm -f /usr/sbin/policy-rc.d
                         for line in fileinput.input(f, inplace=True):
                             if re.match("^[123456]:.*", line):
                                line = "#" + line
-                            print line,
+                            print(line, end=' ')
 
                         ua.chmod('go-w', f)
                         ua.chmod('go-w', os.path.dirname(f))
@@ -570,7 +570,7 @@ rm -f /usr/sbin/policy-rc.d
                     OnlRfsSystemAdmin.chmod('777', os.path.dirname(asrf))
                     asro.format(os.path.join(dir_, asropts['file']), fmt=asropts['format'])
 
-                for (mf, fields) in Configure.get('manifests', {}).iteritems():
+                for (mf, fields) in Configure.get('manifests', {}).items():
                     logger.info("Configuring manifest %s..." % mf)
                     if mf.startswith('/'):
                         mf = mf[1:]
@@ -588,7 +588,7 @@ rm -f /usr/sbin/policy-rc.d
                     else:
                         md['platforms'] = fields['platforms'].split(',')
 
-                    for (k, v) in fields.get('keys', {}).iteritems():
+                    for (k, v) in fields.get('keys', {}).items():
                         if k in md:
                             md[k].update(v)
                         else:
@@ -598,7 +598,7 @@ rm -f /usr/sbin/policy-rc.d
                         json.dump(md, f, indent=2)
                     onlu.execute("sudo chmod a-w %s" % mname)
 
-                for (fname, v) in Configure.get('files', {}).get('add', {}).iteritems():
+                for (fname, v) in Configure.get('files', {}).get('add', {}).items():
                     if fname.startswith('/'):
                         fname = fname[1:]
                     dst = os.path.join(dir_, fname)
@@ -787,7 +787,7 @@ if __name__ == '__main__':
             sys.exit(0)
 
         if ops.show_packages:
-            print "\n".join(x.get_packages())
+            print("\n".join(x.get_packages()))
             sys.exit(0)
 
         if ops.dir is None:
@@ -829,5 +829,5 @@ if __name__ == '__main__':
                     os.unlink(ops.squash)
                 raise OnlRfsError("Squash creation failed.")
 
-    except (OnlRfsError, onlyaml.OnlYamlError), e:
+    except (OnlRfsError, onlyaml.OnlYamlError) as e:
         logger.error(e.value)

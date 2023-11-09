@@ -33,7 +33,7 @@ class MountManager(object):
 
     def is_dev_mounted(self, device):
         self.read_proc_mounts()
-        for (k, v) in self.mounts.iteritems():
+        for (k, v) in self.mounts.items():
             if v['dev'] == device:
                 return True
         return False
@@ -41,7 +41,7 @@ class MountManager(object):
     def mount(self, device, directory, mode='r', timeout=5):
 
         mountargs = [ str(mode) ]
-        currentItems = [x for x in self.mounts.iteritems() if x[1]['dev'] == device]
+        currentItems = [x for x in self.mounts.items() if x[1]['dev'] == device]
         if currentItems:
             currentDirectory, current = currentItems[0]
             if current['mode'] == mode:
@@ -71,7 +71,7 @@ class MountManager(object):
 
             self.logger.debug("+ %s" % cmd)
             subprocess.check_call(cmd, shell=True)
-        except subprocess.CalledProcessError, e:
+        except subprocess.CalledProcessError as e:
             self.logger.error("Mount failed: '%s'" % e.output)
             return False
 
@@ -101,7 +101,7 @@ class MountManager(object):
             self.read_proc_mounts()
             return True
 
-        except subprocess.CalledProcessError,e:
+        except subprocess.CalledProcessError as e:
             self.logger.error("Could not unmount %s @ %s: %s" % (device, directory, e.output))
 
 
@@ -230,7 +230,7 @@ class OnlMountManager(object):
             out = subprocess.check_output(cmd, shell=True)
             self.logger.info("%s [ %s ] is clean." % (device, label))
             return True
-        except subprocess.CalledProcessError, e:
+        except subprocess.CalledProcessError as e:
             self.logger.error("fsck failed: %s" % e.output)
             return False
 
@@ -249,7 +249,7 @@ class OnlMountManager(object):
         if type(labels) is str:
             labels = labels.split(',')
         elif type(labels) is dict:
-            labels = [ labels.keys() ]
+            labels = [ list(labels.keys()) ]
         elif type(labels) is list:
             pass
         else:
@@ -258,7 +258,7 @@ class OnlMountManager(object):
         if 'all' in labels:
             labels = list(labels)
             labels.remove('all')
-            labels = labels + self.mdata['mounts'].keys()
+            labels = labels + list(self.mdata['mounts'].keys())
 
         def _f(label):
             """skip labels that do not resolve to a block device (ideally, optional ones)"""

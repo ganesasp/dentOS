@@ -25,12 +25,12 @@ class OnlInfoObject(object):
     def __init__(self, d, klass=None):
         self._data = d
         if klass:
-            for (m,n) in klass.__dict__.iteritems():
+            for (m,n) in klass.__dict__.items():
                 if m == m.upper():
                     setattr(self, m, None)
 
-                for (k,v) in d.iteritems():
-                    for (m,n) in klass.__dict__.iteritems():
+                for (k,v) in d.items():
+                    for (m,n) in klass.__dict__.items():
                         if n == k:
                             setattr(self, m, v);
                             break
@@ -50,7 +50,7 @@ class OnlInfoObject(object):
 
     @staticmethod
     def string(d, indent=DEFAULT_INDENT):
-        return "\n".join( sorted("%s%s: %s" % (indent,k,v) for k,v in d.iteritems() if not k.startswith('_') and d[k] is not None and k != 'CRC'))
+        return "\n".join( sorted("%s%s: %s" % (indent,k,v) for k,v in d.items() if not k.startswith('_') and d[k] is not None and k != 'CRC'))
 
 
 ############################################################
@@ -162,7 +162,7 @@ class OnlPlatformBase(object):
             try:
                 d = json.load(file(f))
                 self.add_info_dict(name, d, klass)
-            except ValueError, e:
+            except ValueError as e:
                 if required:
                     raise e
                 self.add_info_dict(name, {}, klass)
@@ -237,7 +237,7 @@ class OnlPlatformBase(object):
             for e in [ ".ko", "" ]:
                 path = os.path.join(d, "%s%s" % (module, e))
                 if os.path.exists(path):
-                    cmd = "insmod %s %s" % (path, " ".join([ "%s=%s" % (k,v) for (k,v) in params.iteritems() ]))
+                    cmd = "insmod %s %s" % (path, " ".join([ "%s=%s" % (k,v) for (k,v) in params.items() ]))
                     subprocess.check_call(cmd, shell=True);
                     return True
                 else:
@@ -391,7 +391,7 @@ class OnlPlatformBase(object):
                 # Todo -- disable dmidecode library warnings to stderr
                 # or figure out how to clear the warning log in the decode module.
                 for field in fields:
-                    for v in field['subsystem']().values():
+                    for v in list(field['subsystem']().values()):
                         if type(v) is dict and v['dmi_type'] == field['dmi_type']:
                             rv[field['name']] = v['data'][field['key']]
             except:
@@ -418,10 +418,10 @@ class OnlPlatformBase(object):
             try:
                 with open("%s/new_device" % bus, "w") as f:
                     f.write("%s 0x%x\n" % (driver, addr))
-            except Exception, e:
-                print "Unexpected error initialize device %s:0x%x:%s: %s" % (driver, addr, bus, e)
+            except Exception as e:
+                print("Unexpected error initialize device %s:0x%x:%s: %s" % (driver, addr, bus, e))
         else:
-            print("Device %s:%x:%s already exists." % (driver, addr, bus))
+            print(("Device %s:%x:%s already exists." % (driver, addr, bus)))
 
     def new_devices(self, new_device_list):
         for (driver, addr, bus, devdir) in new_device_list:

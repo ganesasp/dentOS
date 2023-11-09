@@ -21,7 +21,7 @@ class DotDict(dict):
         if item is None:
             raise AttributeError("'%s' object has no attribute '%s'" % (type(self), attr))
 
-        if type(item) == types.DictType:
+        if type(item) == dict:
             item = DotDict(item)
 
         return item

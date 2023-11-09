@@ -10,15 +10,15 @@ import imp
 import glob
 import argparse
 import shutil
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import tempfile
 import time
 
-from InstallUtils import InitrdContext
-from InstallUtils import SubprocessMixin
-from InstallUtils import ProcMountsParser
-from ShellApp import OnieBootContext, OnieSysinfo
-import ConfUtils, BaseInstall
+from .InstallUtils import InitrdContext
+from .InstallUtils import SubprocessMixin
+from .InstallUtils import ProcMountsParser
+from .ShellApp import OnieBootContext, OnieSysinfo
+from . import ConfUtils, BaseInstall
 
 class App(SubprocessMixin, object):
 
@@ -80,13 +80,13 @@ class App(SubprocessMixin, object):
                           self.url, p)
             self.nextUpdate = 0
             if os.isatty(sys.stdout.fileno()):
-                dst, headers = urllib.urlretrieve(self.url, p, reporthook)
+                dst, headers = urllib.request.urlretrieve(self.url, p, reporthook)
             else:
-                dst, headers = urllib.urlretrieve(self.url, p)
+                dst, headers = urllib.request.urlretrieve(self.url, p)
             sys.stdout.write("\n")
 
             self.log.debug("+ chmod +x %s", p)
-            os.chmod(p, 0755)
+            os.chmod(p, 0o755)
 
             env = {}
             env.update(os.environ)

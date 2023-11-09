@@ -117,7 +117,7 @@ class BaseUpgrade(object):
                         (name, eq, value) = v.partition('=')
                         variables[name] = value
                     return variables
-            except Exception, e:
+            except Exception as e:
                 return None
         else:
             return None
@@ -134,7 +134,7 @@ class BaseUpgrade(object):
 
         try:
             shutil.copyfile(src, dst)
-        except Exception, e:
+        except Exception as e:
             self.abort("Exception while copying: %s" % e)
 
     def reboot(self):
@@ -234,7 +234,7 @@ class BaseUpgrade(object):
 
         while True:
             sys.stdout.write(instructions + prompt)
-            choice = raw_input().lower()
+            choice = input().lower()
             if default is not None and choice == '':
                 return valid[default]
             elif choice in valid:
@@ -246,7 +246,7 @@ class BaseUpgrade(object):
     def upgrade_prompt(self, instructions, default='yes'):
         try:
             return self.__upgrade_prompt(instructions, default)
-        except Exception, e:
+        except Exception as e:
             self.logger.error("")
             self.logger.error("Exception: %s" % e)
             self.abort("No upgrade will be performed.")

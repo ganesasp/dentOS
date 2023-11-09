@@ -103,14 +103,14 @@ def loadf(fname, vard={}):
     string = open(fname).read()
     try:
         data = yaml.load(string)
-    except Exception, e:
+    except Exception as e:
         raise OnlYamlError("%s\n(filename: %s)" % (e, fname))
 
     if type(data) is dict:
         _v = dflatten({}, data.get('variables', {}))
         variables.update(_v)
 
-        for (k,v) in _v.iteritems():
+        for (k,v) in _v.items():
             k = interpolate(k, variables)
             v = interpolate(v, variables)
             variables[k] = v
@@ -126,9 +126,9 @@ def loadf(fname, vard={}):
 
     try:
         data = yaml.load(string)
-    except OnlYamlError, e:
+    except OnlYamlError as e:
         raise e
-    except Exception, e:
+    except Exception as e:
         raise OnlYamlError("Interpolation produced invalid results:\n%s\n" %  string)
 
     return data
@@ -138,10 +138,10 @@ if __name__ == '__main__':
     import sys
     try:
         if len(sys.argv) == 2:
-            print yaml.dump(loadf(sys.argv[1]))
+            print(yaml.dump(loadf(sys.argv[1])))
         else:
             sys.stderr.write("usage: %s <yamlfile>\n" % sys.argv[0])
-    except OnlYamlError, e:
+    except OnlYamlError as e:
         sys.stderr.write("error: %s\n" % e.value)
 
 

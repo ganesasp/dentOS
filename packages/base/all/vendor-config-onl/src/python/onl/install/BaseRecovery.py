@@ -8,9 +8,9 @@ import tempfile
 import binascii
 import glob
 import logging
-from InstallUtils import TempdirContext, MountContext, SubprocessMixin, ProcMountsParser
-from InstallUtils import InitrdContext, BlkidParser
-from ConfUtils import ChrootGrubEnv
+from .InstallUtils import TempdirContext, MountContext, SubprocessMixin, ProcMountsParser
+from .InstallUtils import InitrdContext, BlkidParser
+from .ConfUtils import ChrootGrubEnv
 
 class Base(SubprocessMixin):
 
@@ -67,7 +67,7 @@ class Base(SubprocessMixin):
                 try:
                     self.check_call(('umount', m.device,),
                                     vmode=self.V1)
-                except CalledProcessError, what:
+                except CalledProcessError as what:
                     self.log.warn("cannot umount %s: %s",
                                   m.device, str(what))
         return 0

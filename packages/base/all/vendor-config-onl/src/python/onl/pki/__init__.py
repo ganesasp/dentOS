@@ -87,7 +87,7 @@ class OnlPki(OnlServiceMixin):
             self.logger.info("Generating self-signed certificate...")
             csr = tempfile.NamedTemporaryFile(prefix="pki-", suffix=".csr", delete=False)
             csr.close()
-            fields = [ "%s=%s" % (k, v) for k,v in sysconfig.pki.cert.csr.fields.iteritems() ]
+            fields = [ "%s=%s" % (k, v) for k,v in sysconfig.pki.cert.csr.fields.items() ]
             subject = "/" + "/".join(fields)
             self.logger.debug("Subject: '%s'", subject)
             self.logger.debug("CSR: %s", csr.name)

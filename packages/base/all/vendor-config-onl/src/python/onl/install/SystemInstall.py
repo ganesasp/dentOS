@@ -168,7 +168,7 @@ class App(SubprocessMixin):
                 cmd = ('chroot', ctx.dir, "/usr/bin/onl-install", "--force",)
             try:
                 self.check_call(cmd)
-            except subprocess.CalledProcessError, what:
+            except subprocess.CalledProcessError as what:
                 pass
 
     def run(self):

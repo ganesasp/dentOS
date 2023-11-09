@@ -166,7 +166,7 @@ class Parser:
                 continue
 
             if tag == self.FDT_NOP:
-                print "NOP"
+                print("NOP")
                 continue
 
             if tag == self.FDT_END:
@@ -177,7 +177,7 @@ class Parser:
             raise ValueError("invalid tag %d" % tag)
 
     def report(self, stream=sys.stdout):
-        q = [(x, "") for x in self.rootNodes.values()]
+        q = [(x, "") for x in list(self.rootNodes.values())]
         while q:
             n, pfx = q.pop(0)
 
@@ -186,14 +186,14 @@ class Parser:
 
             if n.properties:
                 stream.write("\n")
-            for p in n.properties.values():
+            for p in list(n.properties.values()):
                 stream.write("%s    %s (%d bytes)\n"
                              % (pfx, p.name, p.sz,))
             if n.properties:
                 stream.write("\n")
 
             pfx2 = pfx + "    "
-            q[0:0] = [(x, pfx2) for x in n.nodes.values()]
+            q[0:0] = [(x, pfx2) for x in list(n.nodes.values())]
 
     def getNode(self, path):
         if path == '/':
@@ -266,7 +266,7 @@ class Parser:
             self.log.debug("default profile is %s", pf)
             node = node.nodes[pf]
         else:
-            pf = node.nodes.keys()[0]
+            pf = list(node.nodes.keys())[0]
             self.log.debug("using profile %s", pf)
             node = node.nodes[pf]
 
@@ -534,7 +534,7 @@ class App:
 
         try:
             args = ap.parse_args()
-        except SystemExit, what:
+        except SystemExit as what:
             return what.code
 
         if args.quiet:

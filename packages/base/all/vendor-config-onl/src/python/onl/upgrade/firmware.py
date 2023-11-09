@@ -31,7 +31,7 @@ class FirmwareUpgrade(ubase.BaseOnieUpgrade):
         if self.manifest.get('fwpkg', False):
             if not self.onie_fwpkg_exists():
                 # An ONIE upgrade is probably required.
-                print "The firmware cannot be upgraded because the current ONIE version is not correct. Please perform an ONIE upgrade first."
+                print("The firmware cannot be upgraded because the current ONIE version is not correct. Please perform an ONIE upgrade first.")
                 self.abort()
 
             self.onie_fwpkg_add(os.path.join(sysconfig.upgrade.firmware.package.dir,

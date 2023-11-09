@@ -11,7 +11,7 @@ import string
 import shutil
 import re
 
-import Fit, Legacy
+from . import Fit, Legacy
 
 class SubprocessMixin:
 
@@ -33,7 +33,7 @@ class SubprocessMixin:
 
         vmode = kwargs.pop('vmode', None)
         if vmode == self.V1 and self.log.isEnabledFor(logging.DEBUG):
-            if isinstance(cmd, basestring):
+            if isinstance(cmd, str):
                 raise ValueError("vmode=V1 requires a list")
             cmd = list(cmd)
             cmd[1:1] = ['-v',]
@@ -49,7 +49,7 @@ class SubprocessMixin:
             kwargs['stdout'] = fno
             kwargs['stderr'] = subprocess.STDOUT
 
-        if isinstance(cmd, basestring):
+        if isinstance(cmd, str):
             self.log.debug("+ " + cmd)
         else:
             self.log.debug("+ " + " ".join(cmd))
@@ -79,7 +79,7 @@ class SubprocessMixin:
 
         vmode = kwargs.pop('vmode', None)
         if vmode == self.V1 and self.log.isEnabledFor(logging.DEBUG):
-            if isinstance(cmd, basestring):
+            if isinstance(cmd, str):
                 raise ValueError("vmode=V1 requires a list")
             cmd = list(cmd)
             cmd[1:1] = ['-v',]
@@ -94,7 +94,7 @@ class SubprocessMixin:
                                           suffix='out')
             kwargs['stderr'] = fno
 
-        if isinstance(cmd, basestring):
+        if isinstance(cmd, str):
             self.log.debug("+ " + cmd)
         else:
             self.log.debug("+ " + " ".join(cmd))
@@ -249,7 +249,7 @@ class MountContext(SubprocessMixin):
         if dev is None:
             try:
                 dev = self.check_output(('blkid', '-L', self.label,)).strip()
-            except subprocess.CalledProcessError, what:
+            except subprocess.CalledProcessError as what:
                 raise ValueError("cannot find label %s: %s"
                                  % (self.label, str(what),))
 
@@ -544,7 +544,7 @@ class ProcMtdParser():
         offset = 0
         if os.path.exists("/proc/mtd"):
             with open("/proc/mtd") as fd:
-                for line in fd.xreadlines():
+                for line in fd:
                     if line.startswith("dev:"):
                         pass
                     else:
@@ -1255,7 +1255,7 @@ class ChrootSubprocessMixin:
             cmd = args.pop(0)
         else:
             cmd = kwargs.pop('cmd')
-        if isinstance(cmd, basestring):
+        if isinstance(cmd, str):
             cmd = ('chroot', self.chrootDir,
                    '/bin/sh', '-c', 'IFS=;' + cmd,)
         else:
@@ -1281,7 +1281,7 @@ class ChrootSubprocessMixin:
             cmd = args.pop(0)
         else:
             cmd = kwargs.pop('cmd')
-        if isinstance(cmd, basestring):
+        if isinstance(cmd, str):
             cmd = ('chroot', self.chrootDir,
                    '/bin/sh', '-c', 'IFS=;' + cmd,)
         else:
@@ -1313,7 +1313,7 @@ class OnieSubprocess:
             cmd = args.pop(0)
         else:
             cmd = kwargs.pop('cmd')
-        if isinstance(cmd, basestring):
+        if isinstance(cmd, str):
             cmd = ('onie-shell', '-c', 'IFS=;' + cmd,)
         else:
             cmd = ['onie-shell', '-c',] + " ".join(cmd)
@@ -1333,7 +1333,7 @@ class OnieSubprocess:
             cmd = args.pop(0)
         else:
             cmd = kwargs.pop('cmd')
-        if isinstance(cmd, basestring):
+        if isinstance(cmd, str):
             cmd = ('onie-shell', '-c', 'IFS=;' + cmd,)
         else:
             cmd = ['onie-shell', '-c',] + " ".join(list(cmd))

@@ -12,7 +12,7 @@ ap.add_argument('init', metavar='INIT-SYSTEM', choices=['sysvinit', 'systemd'], 
 ops = ap.parse_args()
 
 if ops.init == 'sysvinit':
-    print '- sysvinit-core'
+    print('- sysvinit-core')
 elif ops.init == 'systemd':
-    print '- systemd'
-    print '- systemd-sysv'
+    print('- systemd')
+    print('- systemd-sysv')

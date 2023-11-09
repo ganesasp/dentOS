@@ -18,9 +18,9 @@ class ListIterator(object):
     def __init__(self, links, castType=None):
         self.links = links
         self.castType = castType
-        self.cur = self.links.links.next
+        self.cur = self.links.links.__next__
 
-    def next(self):
+    def __next__(self):
 
         # Hurr, pointer()/POINTER() types are not directly comparable
         p1 = ctypes.cast(self.cur, ctypes.c_void_p)
@@ -28,7 +28,7 @@ class ListIterator(object):
         if p1.value == p2.value:
             raise StopIteration
 
-        cur, self.cur = self.cur, self.cur.contents.next
+        cur, self.cur = self.cur, self.cur.contents.__next__
         if self.castType is not None:
             cur = ctypes.cast(cur, ctypes.POINTER(self.castType))
         return cur.contents
