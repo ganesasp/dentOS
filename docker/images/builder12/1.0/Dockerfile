@@ -116,7 +116,7 @@ libreadline-dev libsystemd-dev pkg-config \
 texlive-plain-generic texinfo texlive-latex-base
 
 RUN     gem install rake
-RUN     gem install --version 1.3.3 fpm
+RUN     gem install --version 1.15.1 fpm
 
 #
 # The i2c-dev.h user/kernel header conflict is a nightmare.
