@@ -142,12 +142,12 @@ class OnlPlatformBase(object):
                 self.platform_config = self.platform_config[self.platform()]
         elif os.path.exists(y2):
             with open(y2) as fd:
-                self.platform_config = yaml.load(fd)
+                self.platform_config = yaml.full_load(fd)
             if self.platform() in self.platform_config:
                 self.platform_config = self.platform_config[self.platform()]
         elif os.path.exists(y1):
             with open(y1) as fd:
-                self.platform_config = yaml.load(fd)
+                self.platform_config = yaml.full_load(fd)
             if 'default' in self.platform_config:
                 self.platform_config = self.platform_config['default']
         else:
@@ -452,7 +452,7 @@ class OnlPlatformBase(object):
             if fmt == 'yaml':
                 return yamlstr
             else:
-                data = yaml.load(yamlstr)
+                data = yaml.full_load(yamlstr)
                 if fmt == 'json':
                     return json.dumps(data, indent=2)
                 else:

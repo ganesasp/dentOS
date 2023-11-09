@@ -584,7 +584,7 @@ rm -f /usr/sbin/policy-rc.d
                     md['os-release'] = os_release_dict
 
                     if os.path.exists(fields['platforms']):
-                        md['platforms'] = yaml.load(open(fields['platforms']))
+                        md['platforms'] = yaml.full_load(open(fields['platforms']))
                     else:
                         md['platforms'] = fields['platforms'].split(',')
 

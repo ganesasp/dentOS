@@ -49,7 +49,7 @@ g_data={}
 
 if ops._in:
     try:
-        g_data = yaml.load(open(ops._in))
+        g_data = yaml.full_load(open(ops._in))
     except:
         g_data = json.load(open(ops._in))
 
@@ -64,9 +64,9 @@ if ops.kj:
 if ops.ky:
     (k, y) = ops.ky
     if os.path.exists(y):
-        v = yaml.load(open(y))
+        v = yaml.full_load(open(y))
     else:
-        v = yaml.load(y)
+        v = yaml.full_load(y)
     setkeypath(g_data, (k, v))
 
 if ops.kv:

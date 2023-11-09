@@ -130,7 +130,7 @@ class OnlMountManager(object):
         self.mm = MountManager(logger)
 
         if os.path.exists(mdata):
-            mdata = yaml.load(open(mdata, "r"));
+            mdata = yaml.full_load(open(mdata, "r"));
 
         self.mdata = mdata
         self.logger = logger if logger else logging.getLogger(self.__class__.__name__)
