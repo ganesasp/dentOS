@@ -22,8 +22,6 @@ RUN apt-get update && apt-get install -y \
         cpio \
         cryptsetup-bin \
         debhelper \
-        debhelper \
-        debhelper \
 	device-tree-compiler \
         devscripts \
         devscripts \
@@ -31,7 +29,6 @@ RUN apt-get update && apt-get install -y \
         dosfstools \
         doxygen \
         dpkg-cross \
-        dpkg-sig \
         emacs \
         file \
         flex \
@@ -82,11 +79,14 @@ RUN apt-get update && apt-get install -y \
         pkg-config \
         procps \
         psmisc \
-        python \
-        python-debian \
-        python-dnspython \
-        python-yaml \
-        qemu \
+        python-is-python3 \
+        python3 \
+        python3-debian \
+        python3-dnspython \
+        python3-yaml \
+        qemu-system \
+        qemu-system-arm \
+        qemu-system-ppc \
         qemu-user-static \
         rsyslog \
         rsync \
@@ -110,10 +110,10 @@ RUN apt-get update && apt-get install -y \
         zip
 
 RUN apt-get install -y \
-chrpath devscripts dh-autoreconf dh-systemd flex \
+chrpath devscripts dh-autoreconf flex \
 libcap-dev libc-ares-dev libjson-c-dev libpam0g-dev libpcre3-dev \
 libreadline-dev libsystemd-dev pkg-config \
-texlive-generic-recommended texinfo texlive-latex-base
+texlive-plain-generic texinfo texlive-latex-base
 
 RUN     gem install rake
 RUN     gem install --version 1.3.3 fpm
@@ -145,6 +145,19 @@ RUN apt-get install -y \
 RUN xapt -a arm64   libi2c-dev libsnmp-dev libssl-dev libedit-dev ncurses-dev && \
     xapt -a armel   libi2c-dev libsnmp-dev libssl-dev libedit-dev ncurses-dev && \
     xapt -a armhf   libi2c-dev libsnmp-dev libssl-dev libedit-dev ncurses-dev
+
+# Copied from 10.1.1 builder
+ COPY multistrap-insecure-fix.patch /tmp
+ RUN  patch -p1 < /tmp/multistrap-insecure-fix.patch /usr/sbin/multistrap
+ RUN rm /tmp/multistrap-insecure-fix.patch
+
+# Copied from 10.1.5 builder
+RUN apt -y --fix-broken install && apt-get upgrade -y && apt-get -y install apt-cacher-ng \
+ libmnl-dev libmnl-dev  libelf-dev libcap-dev libxtables-dev  libdb-dev
+
+RUN xapt -a arm64 libmnl-dev libelf-dev libcap-dev libxtables-dev libdb-dev
+
+RUN rm -rf /var/lib/apt/lists/* && rm -rf /var/cache/apt/*
 
 #
 # Copy the docker shell init script to /bin
