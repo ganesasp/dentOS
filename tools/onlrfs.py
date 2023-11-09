@@ -634,7 +634,7 @@ rm -f /usr/sbin/policy-rc.d
 
                 if Configure.get('easy_install'):
 
-                    # install Python2 eggs (with this version of Python)
+                    # install Python3 eggs (with this version of Python)
 
                     # tee hee, we cannot use distutils.sysconfig.get_python_lib(),
                     # because ONL/Dent doesn't use the path layout as the host

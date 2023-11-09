@@ -109,7 +109,7 @@ class OnlPlatform_x86_64_wnc_rseb_w1_32_r0(OnlPlatformWNC,
         os.system("ln -sf %s/etc/rc.local /etc/rc.local" % platform_root)
         os.system("ln -sf %s/boot/version /boot/version" % platform_root)
 
-        python_lib = "/usr/local/lib/python2.7/dist-packages/"
+        python_lib = "/usr/local/lib/python3/dist-packages/"
         os.system("ln -sf %s/opt/oom /opt" % platform_root)
         os.system("ln -sf %s/%s/easy-install.pth %s" % \
                 (platform_root, python_lib, python_lib))

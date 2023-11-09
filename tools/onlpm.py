@@ -131,7 +131,7 @@ class OnlPackage(object):
         'license' : 'unknown',
 
         # Default Python Package Installation
-        'PY_INSTALL' : '/usr/lib/python2.7/dist-packages',
+        'PY_INSTALL' : '/usr/lib/python3/dist-packages',
 
         # Default Builder build directory name. Must match setup.env
         'BUILD_DIR' : 'BUILD/%s' % g_dist_codename,
