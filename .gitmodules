@@ -3,10 +3,10 @@
 	url = http://github.com/opennetworklinux/buildroot-mirror
 [submodule "sm/infra"]
 	path = sm/infra
-	url = http://github.com/floodlight/infra
+	url = https://github.com/ganesasp/infra.git
 [submodule "sm/bigcode"]
 	path = sm/bigcode
-	url = http://github.com/floodlight/bigcode
+	url = https://github.com/ganesasp/bigcode.git
 [submodule "sm/build-artifacts"]
 	path = sm/build-artifacts
 	url = https://github.com/ganesasp/build-artifacts.git
