@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/python
 ############################################################
 #
 # This script produces a YAML list on stdout of all

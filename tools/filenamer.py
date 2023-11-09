@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/python
 ############################################################
 #
 # This script provides the file naming scheme for

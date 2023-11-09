@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/python
 ############################################################
 #
 # Common utilities for the ONL python tools.
