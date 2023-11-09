@@ -1075,8 +1075,6 @@ Configure:
   update-rc.d:
     - 'faultd defaults'
     - 'onlpd defaults'
-    - 'snmpd defaults'
-    - 'onlp-snmpd defaults'
     - 'ssh defaults'
     - 'openbsd-inetd remove'
     - 'ntp remove'

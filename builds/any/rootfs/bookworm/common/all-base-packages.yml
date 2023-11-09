@@ -5,7 +5,7 @@
 ############################################################
 - base-files
 - locales
-- python
+- python-is-python3
 - apt
 - apt-utils
 - debconf
@@ -31,12 +31,10 @@
 - ifupdown2
 - psmisc
 - make
-- python-cherrypy3
-- python-tz
-- scapy
-- python-pypcap
-- snmpd
-- snmp
+- python3-cherrypy3
+- python3-tz
+- python3-scapy
+- python3-pcapy
 - pciutils
 - usbutils
 - mtd-utils
@@ -48,7 +46,7 @@
 - ethtool
 - localepurge
 - telnetd
-- python-pyinotify
+- python3-pyinotify
 - cpio
 - util-linux
 - dosfstools
@@ -64,10 +62,9 @@
 - coreutils
 - iptables
 - onl-faultd
-- onlp-snmpd
 - oom-shim
-- python-parted
-- python-yaml
+- python3-parted
+- python3-yaml
 - bzip2
 - xz-utils
 - unzip
@@ -79,7 +76,6 @@
 - sysstat
 - tmux
 - lm-sensors
-- hddtemp
 - bc
 - vim
 - htop

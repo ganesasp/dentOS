@@ -1,7 +1,6 @@
 - u-boot-tools
 - frr
 - bridge-utils
-- mstpd
 - bash-completion
 - onl-kernel-5.15-lts-arm64-all-modules
 - lldpd
