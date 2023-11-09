@@ -17,7 +17,7 @@ import subprocess
 import glob
 import submodules
 import io
-from collections import Iterable
+from collections.abc import Iterable
 import onlyaml
 import onlu
 import fileinput

@@ -6,7 +6,7 @@
 ############################################################
 import logging
 import subprocess
-from collections import Iterable
+from collections.abc import Iterable
 import sys
 import os
 import fcntl
@@ -227,7 +227,7 @@ def filepath(absdir, relpath, eklass, required=True):
 
     # Globs that result in a single file are allowed:
     g = glob.glob(p)
-    if len(g) is 0:
+    if len(g) == 0:
         if required:
             raise eklass("'%s' did not match any files." % p)
     elif len(g) > 1:

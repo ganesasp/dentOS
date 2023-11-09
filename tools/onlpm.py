@@ -6,6 +6,7 @@
 ############################################################
 import argparse
 import os
+import errno
 import sys
 import logging
 import yaml
@@ -20,10 +21,14 @@ import onlu
 from string import Template
 import re
 import json
-import lsb_release
 import pickle as pickle
 
-g_dist_codename = lsb_release.get_distro_information().get('CODENAME')
+ g_dist_codename = None
+ try:
+     g_dist_codename = subprocess.run(["/usr/bin/lsb_release", "-c"], check=True, capture_output=True, text=True)
+     g_dist_codename = g_dist_codename.stdout.split()[1]
+ except subprocess.CalledProcessError as e:
+	     print(g_dist_codename.stderr)
 
 logger = onlu.init_logging('onlpm', logging.INFO)
 
@@ -341,7 +346,7 @@ class OnlPackage(object):
                 try:
                     os.makedirs(dstpath)
                 except OSError as e:
-                    if e.errno != os.errno.EEXIST:
+                    if e.errno != errno.EEXIST:
                         raise
                 shutil.copy(src, dstpath)
             else:
