@@ -125,6 +125,7 @@ if ops.verbose or ops.dry:
 
 logger.debug('arguments: %s\n' % vars(ops))
 
+ops.pull=False
 if ops.pull:
    try:
       print("Pulling %s..." % ops.image)
