@@ -136,9 +136,9 @@ class DtbImage(Image):
 
     def __init__(self, fdata, arch, arch_addrs):
         Image.__init__(self, "flat_dt", fdata, compression="none")
-	if arch == 'arm64':
-		self.load = arch_addrs.get('dtb_arm64_load') # "<0x90000000>"
-		self.entry = arch_addrs.get('dtb_arm64_entry') # "<0x90000000>"
+        if arch == 'arm64':
+            self.load = arch_addrs.get('dtb_arm64_load') # "<0x90000000>"
+            self.entry = arch_addrs.get('dtb_arm64_entry') # "<0x90000000>"
 
     def write(self, f):
         self.start_image(f)
@@ -381,7 +381,7 @@ if __name__ == '__main__':
     else:
         its = ops.its
         if its is None:
-            its = tempfile.NamedTemporaryFile(delete=False)
+            its = tempfile.NamedTemporaryFile(mode='w+t', delete=False)
             fit.writef(its)
             its.close()
             its = its.name

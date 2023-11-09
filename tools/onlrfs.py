@@ -206,7 +206,7 @@ class OnlMultistrapConfig(object):
 
     def generate_handle(self, handle):
         for (name, fields) in self.config.items():
-            handle.write("[%s]\n" % name)
+            handle.write(("[%s]\n" % name).encode("ascii"))
             for (k,v) in fields.items():
 
                 if type(v) is bool:
@@ -221,8 +221,8 @@ class OnlMultistrapConfig(object):
                 if k == 'packages' and type(v) is list:
                     raise OnlRfsError("packages=%s" % v)
 
-                handle.write("%s=%s\n" % (k, v))
-            handle.write("\n")
+                handle.write(("%s=%s\n" % (k, v)).encode("ascii"))
+            handle.write(("\n").encode("ascii"))
 
     def generate_file(self, fname=None):
         if fname is None:

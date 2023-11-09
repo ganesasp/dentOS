@@ -17,14 +17,14 @@ class OnlVersionImplementation(object):
             # The current branch is used as the release version.
             self.release = False
             cmd = ('git', 'rev-parse', '--abbrev-ref', 'HEAD')
-            branch = subprocess.check_output(cmd).strip()
+            branch = subprocess.check_output(cmd, universal_newlines=True).strip()
             self.PRODUCTS[0]['version'] = branch
 
     def V_OS_NAME(self, data):
         return "DENT OS"
 
     def V_BUILD_SHA1(self, data):
-        return data['build_sha1']
+        return data['build_sha1'].decode("ascii")
 
     def V_BUILD_SHORT_SHA1(self, data):
         return self.V_BUILD_SHA1(data)[0:7]

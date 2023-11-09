@@ -190,8 +190,8 @@ logger.info("generating shar")
 
 if opts.unzip_pad:
 
-    wfd = open(shar, "w+")
-    rfd = open(zipFile, "r")
+    wfd = open(shar, "wb+")
+    rfd = open(zipFile, "rb")
     shutil.copyfileobj(rfd, wfd)
     rfd.close()
 
@@ -201,7 +201,7 @@ if opts.unzip_pad:
 
     logger.info("splicing in SFX")
     wfd.seek(0, 0)
-    wfd.write(buf)
+    wfd.write(buf.encode('ascii'))
 
     logger.info("saving first block")
     wfd.seek(len(buf)-opts.blocksize, 0)
@@ -210,13 +210,13 @@ if opts.unzip_pad:
     wfd.close()
 
     # adjust buf to include magic
-    buf = buf[:-opts.blocksize] + magic
+    buf = buf[:-opts.blocksize].encode("ascii") + magic
 
 else:
 
-    wfd = open(shar, "w")
+    wfd = open(shar, "wb")
     wfd.write(buf)
-    rfd = open(zipFile, "r")
+    rfd = open(zipFile, "rb")
     shutil.copyfileobj(rfd, wfd)
     rfd.close()
     wfd.close()
@@ -230,7 +230,7 @@ ckf = hashlib.md5()
 ckf.update(buf[:ckStart])
 ckf.update(buf[ckEnd+1:])
 
-rfd = open(shar, "r")
+rfd = open(shar, "rb")
 rfd.seek(len(buf), 0)
 while True:
     buf = rfd.read(10*1024)
@@ -239,13 +239,13 @@ while True:
 rfd.close()
 
 logger.info("adjusting checksum")
-wfd = open(shar, "r+")
+wfd = open(shar, "rb+")
 wfd.seek(ckStart, 0)
-wfd.write("SFX_CHECKSUM=%s #" % ckf.hexdigest())
+wfd.write(bytes('SFX_CHECKSUM=%s #' % ckf.hexdigest(), encoding="ascii"))
 wfd.close()
 
 logger.info("+ /bin/chmod +x %s", shar)
-os.chmod(shar, 0755)
+os.chmod(shar, 0o755)
 
 logger.debug("+ /bin/rm %s", zipFile)
 os.unlink(zipFile)

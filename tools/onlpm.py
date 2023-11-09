@@ -23,12 +23,12 @@ import re
 import json
 import pickle as pickle
 
- g_dist_codename = None
- try:
-     g_dist_codename = subprocess.run(["/usr/bin/lsb_release", "-c"], check=True, capture_output=True, text=True)
-     g_dist_codename = g_dist_codename.stdout.split()[1]
- except subprocess.CalledProcessError as e:
-	     print(g_dist_codename.stderr)
+g_dist_codename = None
+try:
+    g_dist_codename = subprocess.run(["/usr/bin/lsb_release", "-c"], check=True, capture_output=True, text=True)
+    g_dist_codename = g_dist_codename.stdout.split()[1]
+except subprocess.CalledProcessError as e:
+	print(g_dist_codename.stderr)
 
 logger = onlu.init_logging('onlpm', logging.INFO)
 
@@ -68,7 +68,7 @@ class OnlPackageServiceScript(object):
         if self.SCRIPT is None:
             raise AttributeError("The SCRIPT attribute must be provided by the deriving class.")
 
-        with tempfile.NamedTemporaryFile(dir=dir, delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode='w+t', dir=dir, delete=False) as f:
             f.write(self.SCRIPT % dict(service=os.path.basename(service.replace(".init", ""))))
             self.name = f.name
 
@@ -1009,7 +1009,7 @@ class OnlPackageManager(object):
 
     def __builder_arches(self):
         arches = [ 'all', 'amd64' ]
-        arches = arches + subprocess.check_output(['dpkg', '--print-foreign-architectures']).split()
+        arches = arches + subprocess.check_output(['dpkg', '--print-foreign-architectures'], universal_newlines=True).split()
         return arches
 
     def __build_cache(self, basedir):

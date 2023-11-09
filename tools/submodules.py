@@ -35,7 +35,7 @@ def check_output(cmd, *args, **kwargs):
         logger.debug("+ " + cmd)
     else:
         logger.debug("+ " + " ".join(cmd))
-    return subprocess.check_output(cmd, *args, **kwargs)
+    return subprocess.check_output(cmd, *args, **kwargs, universal_newlines=True)
 
 
 class OnlSubmoduleError(Exception):

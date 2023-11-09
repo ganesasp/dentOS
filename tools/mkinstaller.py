@@ -67,7 +67,7 @@ class InstallerShar(object):
         sys.exit(1)
 
     def find_file(self, package, filename):
-        return subprocess.check_output("onlpm --find-file %s %s" % (package, filename), shell=True).strip()
+        return subprocess.check_output("onlpm --find-file %s %s" % (package, filename), shell=True, universal_newlines=True).strip()
 
     def setvar(self, name, value):
         self.template = self.template.replace("@%s@" % name, value)
@@ -94,7 +94,7 @@ class InstallerShar(object):
     def add_fit(self, package, filename, add_platforms=True):
         self.fit = self.find_file(package, filename)
         VONL=os.path.join(self.ONL, "packages", "base", "all", "vendor-config-onl")
-        offsets = subprocess.check_output("PYTHONPATH=%s/src/python %s/src/bin/pyfit -v offset %s --initrd" % (VONL, VONL, self.fit), shell=True).split()
+        offsets = subprocess.check_output("PYTHONPATH=%s/src/python %s/src/bin/pyfit -v offset %s --initrd" % (VONL, VONL, self.fit), shell=True, universal_newlines=True).split()
         self.setvar('INITRD_ARCHIVE', os.path.basename(self.fit))
         self.setvar('INITRD_OFFSET', offsets[0])
         self.setvar('INITRD_SIZE', str(int(offsets[1]) - int(offsets[0])))

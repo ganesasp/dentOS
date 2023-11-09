@@ -93,13 +93,13 @@ class Parser:
             fd.seek(pos, 0)
 
         def _label():
-            buf = ""
+            buf = b''
             while True:
                 c = fd.read(1)
-                if c == '\x00': break
+                if c == b'\x00': break
                 if c:
                     buf += c
-            return buf
+            return buf.decode("ascii")
 
         def _string(off):
             if off in strings:
@@ -218,13 +218,13 @@ class Parser:
             fd.seek(self.structPos, 0)
             fd.seek(prop.offset)
             buf = fd.read(prop.sz)
-            if buf[-1] == '\x00':
-                return buf[:-1]
-            return buf
+            if buf[-1:] == b'\x00':
+                return buf[:-1].decode("ascii")
+            return buf.decode("ascii")
         if self.stream is not None:
             return _get(self.stream)
         else:
-            with open(self.path) as fd:
+            with open(self.path, 'rb') as fd:
                 return _get(fd)
 
     def dumpNodeProperty(self, node, propIsh, outPath):
@@ -374,7 +374,7 @@ class ExtractRunner(ExtractBase):
             rfd.seek(self.dataProp.offset, 0)
             buf = rfd.read(self.dataProp.sz)
             if self.text:
-                if buf[-1:] != '\x00':
+                if buf[-1:] != b'\x00':
                     self.log.error("missing NUL terminator")
                     return 1
                 wfd.write(buf[:-1])
@@ -486,7 +486,7 @@ class App:
                             help="Dump tree structure",
                             usage=DUMP_USAGE)
         apd.set_defaults(mode='dump')
-        apd.add_argument('fit-file', type=open,
+        apd.add_argument('fit-file', type=argparse.FileType('rb'),
                          help="FIT file")
 
         apx = sp.add_parser('extract',
@@ -494,7 +494,7 @@ class App:
                             usage=EXTRACT_USAGE,
                             epilog=EXTRACT_EPILOG)
         apx.set_defaults(mode='extract')
-        apx.add_argument('fit-file', type=open,
+        apx.add_argument('fit-file', type=argparse.FileType('rb'),
                          help="FIT file")
         apx.add_argument('-o', '--output',
                          type=argparse.FileType('wb', 0),
@@ -521,7 +521,7 @@ class App:
                             usage=OFFSET_USAGE,
                             epilog=OFFSET_EPILOG)
         apo.set_defaults(mode='offset')
-        apo.add_argument('fit-file', type=open,
+        apo.add_argument('fit-file', type=argparse.FileType('rb'),
                          help="FIT file")
         apo.add_argument('--initrd', action="store_true",
                          help="Extract platform initrd")
