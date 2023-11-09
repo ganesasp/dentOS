@@ -418,6 +418,7 @@ if [ -f /usr/sbin/locale-gen ]; then
     update-locale LANG=en_US.UTF-8
 fi
 
+sed -i 's|remove-on-upgrade /etc/resolvconf/update.d/dnscache |/etc/resolvconf/update.d/dnscache newconffile remove-on-upgrade|' /var/lib/dpkg/status
 dpkg --configure -a || true
 dpkg --configure -a # configure any packages that failed the first time and abort on failure.
 
